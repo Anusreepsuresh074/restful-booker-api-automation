@@ -1,0 +1,8 @@
+pytest==8.3.3
+pytest-rerunfailures
+pytest-xdist
+requests
+python-dotenv
+PyYAML
+allure-pytest
+jsonschema

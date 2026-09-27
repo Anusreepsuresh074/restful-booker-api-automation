@@ -1,0 +1,20 @@
+dev:
+  base_url: "https://restful-booker.herokuapp.com"
+  timeout: 30
+
+# Restful-Booker is a single public demo service — no separate staging/prod exist.
+# These stay defined (some skills expect the standard three keys) but unused.
+staging:
+  base_url: "https://restful-booker.herokuapp.com"
+  timeout: 30
+
+prod:
+  base_url: "https://restful-booker.herokuapp.com"
+  timeout: 30
+
+# Optional: the target API's own repo ships a Docker Compose setup exposing a
+# pinned, non-shared instance — useful if the shared public instance's 10-minute
+# auto-reset or shared-state quirks ever get in the way of a run.
+local:
+  base_url: "http://localhost:3001"
+  timeout: 30

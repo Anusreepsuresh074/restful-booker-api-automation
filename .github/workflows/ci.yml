@@ -1,0 +1,64 @@
+name: CI
+
+# GitHub Actions runs CI for this repo: a fast smoke suite gates every PR; the full regression
+# suite is separate and runs on demand (see the `regression` job below) rather than on a fabricated
+# schedule — no cron time was ever confirmed, and inventing one would put a made-up run time into
+# version control. Add a `schedule:` trigger here once an actual nightly time is decided.
+#
+# Requires two repository secrets to be configured (Settings -> Secrets and variables -> Actions):
+# AUTH_USERNAME and AUTH_PASSWORD — the demo credentials POST /auth needs.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
+  AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
+
+jobs:
+  smoke:
+    name: Smoke suite (PR gate)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - run: pip install -r requirements.txt
+      - run: >-
+          pytest -m smoke
+          --env=dev
+          -n auto --dist loadscope
+          --reruns 2 --reruns-delay 5
+          --junitxml=reports/junit.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-reports
+          path: reports/**
+
+  regression:
+    name: Full regression suite
+    runs-on: ubuntu-latest
+    # Manual trigger only (see note above) until a real schedule is confirmed.
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - run: pip install -r requirements.txt
+      - run: >-
+          pytest -m regression
+          --env=dev
+          -n auto --dist loadscope
+          --reruns 2 --reruns-delay 5
+          --junitxml=reports/junit.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: regression-reports
+          path: reports/**

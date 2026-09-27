@@ -29,15 +29,15 @@ Rules that follow from that:
 
 | Thing | Convention | Example |
 |---|---|---|
-| Endpoint constant | `UPPER_SNAKE`, one per operation, path template with `{}` placeholders | `UPDATE_GROUP_STATUS = "/v1/organisation/{org_id}/branch/{branch_id}/group/{group_id}/{status}"` |
-| Payload factory | `<action>_<resource>_payload` | `create_group_payload(...)` |
-| Schema constant | `<OPERATION>_<KIND>_SCHEMA` | `CREATE_GROUP_RESPONSE_SCHEMA`, `ERROR_STATUS_SCHEMA` |
-| Helper class | `<Feature>Helper`, one per feature | `GroupHelper` |
-| Helper method | verb-first, matching the business action, not the HTTP verb | `update_group_status(...)`, not `patch_group(...)` |
-| Test file | `test_NNN_<feature>_<case-type-or-theme>.py`, numbered per feature folder | `test_004_group_status_auth_authz.py` |
-| Test class | `Test<Feature><Theme>` | `TestGroupStatusHappy` |
-| Test method | exactly the matrix **Test name** column | `test_activate_inactive_group_happy` |
-| Test-data class | `<Feature>TestData` in `<feature>_td.py` | `GroupStatusTestData` |
+| Endpoint constant | `UPPER_SNAKE`, one per operation, path template with `{}` placeholders | `UPDATE_ORDER_STATUS = "/v1/stores/{store_id}/orders/{order_id}/{status}"` |
+| Payload factory | `<action>_<resource>_payload` | `create_order_payload(...)` |
+| Schema constant | `<OPERATION>_<KIND>_SCHEMA` | `CREATE_ORDER_RESPONSE_SCHEMA`, `ERROR_STATUS_SCHEMA` |
+| Helper class | `<Feature>Helper`, one per feature | `OrderHelper` |
+| Helper method | verb-first, matching the business action, not the HTTP verb | `update_order_status(...)`, not `patch_order(...)` |
+| Test file | `test_NNN_<feature>_<case-type-or-theme>.py`, numbered per feature folder | `test_004_order_status_auth_authz.py` |
+| Test class | `Test<Feature><Theme>` | `TestOrderStatusHappy` |
+| Test method | exactly the matrix **Test name** column | `test_cancel_pending_order_happy` |
+| Test-data class | `<Feature>TestData` in `<feature>_td.py` | `OrderStatusTestData` |
 
 Path-template placeholders use the same names as the fixtures/arguments that fill them, so `.format(...)` calls read without a lookup.
 
@@ -51,7 +51,7 @@ One matrix row → one test method. Keep the body in three visible parts, no sec
 
 Each method carries:
 
-- A docstring starting with the matrix **Rule** (`RULE-3: activating a CustomTerm-interval schedule is rejected`) followed by `Verifies: <the matrix's plain-English intent>`. This is the traceability the Rule column is for.
+- A docstring starting with the matrix **Rule** (`RULE-orders-shipped-cannot-cancel: cancelling a shipped order is rejected`) followed by `Verifies: <the matrix's plain-English intent>`. This is the traceability the Rule column is for.
 - `@allure.title("Sl No. <n> — <short case>")` so a report row maps back to a matrix row.
 - Class-level `@allure.feature`, `@allure.story`, and `@pytest.mark.<feature>` (plus the scope markers `ci-integration` registers, e.g. `smoke`/`regression`, once those exist).
 
@@ -62,7 +62,7 @@ Don't wrap a test body in `try/except`. A raised `AssertionError` is the result;
 Helpers take `status_code: int = <success>` and assert it. A negative row passes the expected failure code instead of duplicating the helper:
 
 ```python
-group_helper.update_group_status(headers, ..., status="disabled", status_code=400)
+order_helper.update_order_status(headers, ..., status="refunded", status_code=400)
 ```
 
 The helper validates against the success schema when the status is the success one and against the documented error schema otherwise. That keeps `contract-schema` and `error-shape` rows from needing a second code path.
@@ -72,23 +72,23 @@ The helper validates against the success schema when the status is the success o
 For any row expecting a 2xx on `POST`/`PUT`/`PATCH`/`DELETE`, the write is not the assertion — the read-back is:
 
 ```python
-group_helper.update_group_status(headers, ..., status="inactive")
-group_helper.assert_group_status_is(headers, ..., group_id, expected="inactive")   # documented GET
+order_helper.update_order_status(headers, ..., status="cancelled")
+order_helper.assert_order_status_is(headers, ..., order_id, expected="cancelled")   # documented GET
 ```
 
 - The read-back lives in the helper as its own `@allure.step` method, called inline from the same test method — never a separate test.
 - It reuses the auth fixture the write used.
 - Only wire it when `context/api-context.md` documents a GET for that resource. If it doesn't, classify `no-read-endpoint-available` and assert the write response alone — never invent the GET.
-- A setup call that creates a resource (`create_group`) is itself a 2xx write and gets the same treatment as the row's primary call.
+- A setup call that creates a resource (`create_order`) is itself a 2xx write and gets the same treatment as the row's primary call.
 
 ## Created-resource registry
 
 Every test that causes a resource to exist registers it — including resources created in *setup*, not just the one the row is about:
 
 ```python
-def test_deactivate_active_group_happy(self, group_helper, auth_token, ..., created_group_ids):
-    group = group_helper.create_group(auth_headers(auth_token), org_id, branch_id)
-    created_group_ids(group["id"])
+def test_cancel_pending_order_happy(self, order_helper, auth_token, ..., created_order_ids):
+    order = order_helper.create_order(auth_headers(auth_token), store_id)
+    created_order_ids(order["id"])
 ```
 
 One shared registry for the project (`reports/created-resources.jsonl` by default), one entry per resource with type, id, environment, and creation timestamp. The fixture only appends — no post-yield delete, no finalizer, no `atexit`. Clearing is `teardown`'s job, on an explicit yes.
@@ -105,10 +105,10 @@ One shared registry for the project (`reports/created-resources.jsonl` by defaul
 Use `_td.py` when a row has multiple input variants; keep single-value cases inline. Every `pytest.param` gets an explicit `id=` so the Allure/JUnit test name stays readable and stable across runs (test identity is what `flaky-test-triage` matches on — an unstable id looks like a brand-new test with no history).
 
 ```python
-class GroupStatusTestData:
+class OrderStatusTestData:
     INVALID_STATUSES = [
-        pytest.param("Active", id="wrong-case"),
-        pytest.param("disabled", id="invalid-enum"),
+        pytest.param("Cancelled", id="wrong-case"),
+        pytest.param("refunded", id="invalid-enum"),
     ]
 ```
 
@@ -117,7 +117,7 @@ Name constants for what they mean to the *rule*, not for their literal value, an
 ## Imports and formatting
 
 - Standard library, then third-party, then first-party (`src.*`, `tests.*`), separated by blank lines.
-- Absolute imports from the project root (`from src.helper.group_helper import GroupHelper`) — no relative imports across layers.
+- Absolute imports from the project root (`from src.helper.order_helper import OrderHelper`) — no relative imports across layers.
 - 4-space indent, one class per test file unless rows genuinely share a story, module docstring only where the file's scope isn't obvious from its name.
 - No commented-out code and no `TODO` in generated output. An unfinished row is a skipped row reported in the summary and the traceability record, not a comment left in a file.
 

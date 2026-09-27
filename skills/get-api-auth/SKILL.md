@@ -148,7 +148,7 @@ like:
   new one.
 - Recommend fixture names `pytest-api` can wire directly to, matching this
   suite's convention: a primary token fixture (e.g. `auth_token` or a
-  project-specific name like `ws_token`), plus the negative-state fixtures
+  project-specific name like `api_token`), plus the negative-state fixtures
   the next section covers.
 - State security expectations explicitly: never commit tokens or
   credentials, mask them in logs/error output, scope credentials to the
@@ -180,14 +180,15 @@ like:
     privileged account/role if the API supports one; note what that
     account/role should be.
   - **Permission/plan-scoped variants — one account per denial reason.**
-    Org/branch/permission/plan-based APIs need distinct forbidden states,
-    each with its own error code: zero org permissions, branch excluded,
-    one specific permission missing, plan/subscription lacking the feature.
-    List each state and what account/org config produces it — don't
+    Multi-tenant, permission- or plan-based APIs often need distinct
+    forbidden states, each with its own error code: no access to the
+    tenant at all, access to the tenant but not this sub-resource, one
+    specific permission missing, subscription plan lacking the feature.
+    List each state and what account/tenant config produces it — don't
     collapse them into one "insufficient permissions" line. For *how* to
-    actually provision each state, check in this order: an admin/internal
-    API or seed script in the repo for creating roles/orgs/plans, then a
-    documented test-environment fixture (e.g. a seeded fixture org per
+    actually provision each state, check in this order: an admin API or
+    seed script in the repo for creating roles/tenants/plans, then a
+    documented test-environment fixture (e.g. a seeded test tenant per
     plan tier), then fall back to naming it as a manual ask for the API/
     platform team. If none of these resolve it, say so explicitly under
     Open Questions rather than presenting the state as available.

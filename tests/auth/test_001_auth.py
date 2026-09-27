@@ -10,7 +10,6 @@ pytestmark = pytest.mark.regression
 
 @allure.feature("Auth")
 class TestAuth:
-
     @pytest.mark.smoke
     @allure.story("Valid documented credentials exchange for a token")
     def test_auth_returns_token_for_valid_credentials(self, auth_helper):

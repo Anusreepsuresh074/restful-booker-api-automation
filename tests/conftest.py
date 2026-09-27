@@ -1,7 +1,7 @@
 import base64
 import json
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
@@ -54,7 +54,7 @@ def invalid_auth_cookie_header(auth_token):
 @pytest.fixture(scope="session")
 def basic_auth_wrong_password_header():
     username = os.environ["AUTH_USERNAME"]
-    credentials = f"{username}:wrong-password".encode("utf-8")
+    credentials = f"{username}:wrong-password".encode()
     encoded = base64.b64encode(credentials).decode("ascii")
     return {"Authorization": f"Basic {encoded}"}
 
@@ -71,7 +71,7 @@ def resource_registry(config):
             "resource_type": resource_type,
             "id": resource_id,
             "environment": config.env,
-            "created_at": datetime.now(timezone.utc).isoformat(),
+            "created_at": datetime.now(UTC).isoformat(),
         }
         with open(_REGISTRY_PATH, "a") as f:
             f.write(json.dumps(entry) + "\n")

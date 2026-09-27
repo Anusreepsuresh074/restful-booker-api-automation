@@ -64,3 +64,6 @@ Thumbs.db
 *.mov
 *.wmv
 
+
+# Tool caches
+.ruff_cache/

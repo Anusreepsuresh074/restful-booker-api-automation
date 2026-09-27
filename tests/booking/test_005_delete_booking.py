@@ -8,7 +8,6 @@ pytestmark = pytest.mark.regression
 
 @allure.feature("Booking")
 class TestDeleteBooking:
-
     @staticmethod
     def _create_booking(booking_helper, resource_registry):
         response = booking_helper.create_booking(booking_payload_unique())

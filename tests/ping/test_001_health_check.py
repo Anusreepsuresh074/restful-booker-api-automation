@@ -8,7 +8,6 @@ pytestmark = pytest.mark.regression
 
 @allure.feature("Ping")
 class TestPingHealthCheck:
-
     @pytest.mark.smoke
     @allure.story("RULE-ping-health-check: GET /ping returns 201 Created with body 'Created'")
     def test_ping_returns_health_check(self, ping_helper):

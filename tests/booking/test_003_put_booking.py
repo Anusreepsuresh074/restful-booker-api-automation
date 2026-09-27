@@ -9,7 +9,6 @@ pytestmark = pytest.mark.regression
 
 @allure.feature("Booking")
 class TestPutBooking:
-
     @staticmethod
     def _create_booking(booking_helper, resource_registry):
         response = booking_helper.create_booking(booking_payload_unique())
@@ -18,8 +17,10 @@ class TestPutBooking:
         return booking_id
 
     @pytest.mark.smoke
-    @allure.story("RULE-booking-write-requires-token + RULE-booking-put-full-replace: full replace "
-                  "succeeds with a valid Cookie token")
+    @allure.story(
+        "RULE-booking-write-requires-token + RULE-booking-put-full-replace: full replace "
+        "succeeds with a valid Cookie token"
+    )
     def test_update_booking_full_replace_with_valid_token(self, booking_helper, resource_registry, auth_cookie_header):
         """case: TC-put-booking-id-happy-full-replace"""
         booking_id = self._create_booking(booking_helper, resource_registry)

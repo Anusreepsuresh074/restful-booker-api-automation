@@ -13,10 +13,7 @@ def _redact(value):
     report — request bodies (e.g. POST /auth) carry a plaintext password that has no business
     appearing in a report, even for a non-secret demo credential."""
     if isinstance(value, dict):
-        return {
-            key: ("***" if key.lower() in _SENSITIVE_KEYS else _redact(val))
-            for key, val in value.items()
-        }
+        return {key: ("***" if key.lower() in _SENSITIVE_KEYS else _redact(val)) for key, val in value.items()}
     return value
 
 

@@ -9,7 +9,6 @@ pytestmark = pytest.mark.regression
 
 @allure.feature("Booking")
 class TestPatchBooking:
-
     @staticmethod
     def _create_booking(booking_helper, resource_registry):
         original_payload = booking_payload_unique()
@@ -60,6 +59,4 @@ class TestPatchBooking:
         """Endpoint inventory: PATCH /booking/{id} (Booking response schema ref)
         case: TC-patch-booking-id-contract-schema-updated-booking-shape"""
         booking_id, _ = self._create_booking(booking_helper, resource_registry)
-        booking_helper.partial_update_booking(
-            booking_id, booking_partial_update_payload(), headers=auth_cookie_header
-        )
+        booking_helper.partial_update_booking(booking_id, booking_partial_update_payload(), headers=auth_cookie_header)

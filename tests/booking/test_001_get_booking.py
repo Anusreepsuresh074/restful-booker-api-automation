@@ -11,7 +11,6 @@ pytestmark = pytest.mark.regression
 
 @allure.feature("Booking")
 class TestGetBooking:
-
     @pytest.mark.smoke
     @allure.story("RULE-data-shared-instance: filtering finds the test's own booking by id")
     def test_get_booking_filter_returns_own_created_id(self, booking_helper, resource_registry):

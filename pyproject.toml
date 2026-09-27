@@ -1,0 +1,18 @@
+[project]
+name = "restful-booker-api-automation"
+version = "1.0.0"
+description = "Python + pytest API test automation for the Restful-Booker practice API"
+readme = "README.md"
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = [".claude", "context", "skills", "agents"]
+
+[tool.ruff.lint]
+# pycodestyle, pyflakes, isort, bugbear, pyupgrade, simplify
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "tests"]

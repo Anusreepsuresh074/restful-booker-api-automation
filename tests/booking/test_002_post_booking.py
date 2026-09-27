@@ -9,7 +9,6 @@ pytestmark = pytest.mark.regression
 
 @allure.feature("Booking")
 class TestPostBooking:
-
     @pytest.mark.smoke
     @allure.story("RULE-booking-post-open-no-auth: a well-formed booking is created and echoed back")
     def test_create_booking_with_valid_payload(self, booking_helper, resource_registry):

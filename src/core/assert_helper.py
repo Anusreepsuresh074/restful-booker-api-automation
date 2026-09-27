@@ -30,8 +30,7 @@ class AssertHelper:
     @staticmethod
     def assert_is_instance(value, expected_type, context: str = ""):
         assert isinstance(value, expected_type), (
-            f"Expected {context} to be of type {expected_type.__name__}, "
-            f"got {type(value).__name__} ({value!r})"
+            f"Expected {context} to be of type {expected_type.__name__}, got {type(value).__name__} ({value!r})"
         )
 
     @staticmethod
@@ -50,9 +49,7 @@ class AssertHelper:
     @staticmethod
     def assert_field_equals(body: dict, field: str, expected, path: str = ""):
         actual = body.get(field)
-        assert actual == expected, (
-            f"Expected {path}{field}={expected!r}, got {actual!r}. Full body: {body}"
-        )
+        assert actual == expected, f"Expected {path}{field}={expected!r}, got {actual!r}. Full body: {body}"
 
     @staticmethod
     def assert_field_present(body: dict, field: str, path: str = ""):
@@ -62,8 +59,7 @@ class AssertHelper:
     def assert_field_type(body: dict, field: str, expected_type, path: str = ""):
         value = body.get(field)
         assert isinstance(value, expected_type), (
-            f"Expected {path}{field} to be of type {expected_type.__name__}, "
-            f"got {type(value).__name__} ({value!r})"
+            f"Expected {path}{field} to be of type {expected_type.__name__}, got {type(value).__name__} ({value!r})"
         )
 
     @staticmethod
@@ -72,9 +68,7 @@ class AssertHelper:
 
     @staticmethod
     def assert_not_contains(haystack, needle, context: str = ""):
-        assert needle not in haystack, (
-            f"Expected {context}not to contain {needle!r}, got {haystack!r}"
-        )
+        assert needle not in haystack, f"Expected {context}not to contain {needle!r}, got {haystack!r}"
 
     @staticmethod
     def assert_matches_regex(value: str, pattern: str, context: str = ""):
@@ -91,15 +85,12 @@ class AssertHelper:
     def assert_implies(antecedent: bool, consequent: bool, antecedent_desc: str, consequent_desc: str):
         """Asserts `antecedent -> consequent`. Used for response-field invariants that must hold
         for a resource in any state, rather than pinning an assertion to one record's values."""
-        assert (not antecedent) or consequent, (
-            f"Invariant violated: when {antecedent_desc}, expected {consequent_desc}"
-        )
+        assert (not antecedent) or consequent, f"Invariant violated: when {antecedent_desc}, expected {consequent_desc}"
 
     @staticmethod
     def assert_iff(left: bool, right: bool, left_desc: str, right_desc: str):
         """Asserts `left <-> right` — both sides must agree. Same purpose as assert_implies, for
         rules where the response fields are expected to be mutually consistent in both directions."""
         assert left == right, (
-            f"Invariant violated: {left_desc} is {left}, but {right_desc} is {right} — "
-            f"these must agree"
+            f"Invariant violated: {left_desc} is {left}, but {right_desc} is {right} — these must agree"
         )

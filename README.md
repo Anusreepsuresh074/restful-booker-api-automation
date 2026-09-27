@@ -1,11 +1,14 @@
 # Restful-Booker API Test Automation
 
+![CI](https://github.com/Anusreepsuresh074/restful-booker-api-automation/actions/workflows/ci.yml/badge.svg)
+**[Live test report](https://anusreepsuresh074.github.io/restful-booker-api-automation/)**
+
 A Python + pytest API test automation suite for [Restful-Booker](https://restful-booker.herokuapp.com) — a public practice API simulating a hotel booking system (login, then full CRUD on a booking resource).
 
 **27 tests**, covering all 8 endpoints across happy-path, negative, boundary, auth/authz, and contract/schema cases — each traced back to a documented business rule. Every write is verified with a follow-up read (not just trusted on its own response), and every response is checked against a resolved JSON Schema, not just a status code. Results are reported through [Allure](https://allurereport.org/).
 
 ```
-27 passed in 66.55s  →  https://restful-booker.herokuapp.com (live)
+27 passed in ~20s (parallel, -n auto)  →  https://restful-booker.herokuapp.com (live)
 ```
 
 ## Why this project
@@ -55,7 +58,8 @@ One deliberate departure from the textbook version: classic POM tutorials often 
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # runtime deps (pinned) + ruff, pre-commit
+pre-commit install                    # lint + format on every commit
 
 # credentials for /auth — this API's one fixed public demo login
 export AUTH_USERNAME=admin
@@ -74,11 +78,21 @@ Run just the fast smoke subset, or the full marked regression suite:
 ```bash
 pytest -m smoke        # 9 tests — the fast, PR-gating subset
 pytest -m regression   # all 27 — every test carries this marker
+pytest -n auto         # in parallel, one worker per CPU core
+ruff check . && ruff format --check .   # lint
 ```
 
 ## CI
 
-`.github/workflows/ci.yml` runs the smoke suite on every PR and push to `main`. The full regression suite is manual-trigger only (`workflow_dispatch`) until a real nightly schedule is decided — no fabricated cron time. It needs two repository secrets configured (Settings → Secrets and variables → Actions): `AUTH_USERNAME` and `AUTH_PASSWORD`.
+`.github/workflows/ci.yml`:
+
+- **Lint** (ruff check + format) gates every run.
+- **Smoke suite** on every push and PR — the fast gate, with a JUnit test summary on the run page.
+- **Full regression suite** nightly at 02:00 UTC and on demand (Actions → CI → Run workflow).
+- **Allure report** with run-over-run history, published to [GitHub Pages](https://anusreepsuresh074.github.io/restful-booker-api-automation/) after every non-PR run.
+- **Dependabot** proposes dependency and action updates weekly.
+
+It needs two repository secrets (Settings → Secrets and variables → Actions): `AUTH_USERNAME` and `AUTH_PASSWORD`.
 
 ## What's actually in this repo
 
@@ -93,4 +107,4 @@ pytest -m regression   # all 27 — every test carries this marker
 
 ## The tooling behind it
 
-This project's framework and test suite were built through a structured, repeatable AI-assisted workflow (Claude Code skills — `skills/` and `agents/` in this repo): discover the API's surface and business rules, resolve auth, design a reviewed test-case matrix, generate the pytest suite, execute it live, and validate real responses against schema — with a human review checkpoint before any test code is generated. `context/*.md` documents each stage's output. The skills themselves are a reusable, project-agnostic suite (see `skills/<name>/SKILL.md` for each one's full spec) — this repo is both the tooling and its first real, executed application.
+This project's framework and test suite were built through a structured, repeatable AI-assisted workflow (my own Claude Code skills — `skills/` and `agents/` in this repo): discover the API's surface and business rules, resolve auth, design a reviewed test-case matrix, generate the pytest suite, execute it live, and validate real responses against schema — with a human review checkpoint before any test code is generated. `context/*.md` documents each stage's output. The skills themselves are a reusable, project-agnostic suite (see `skills/<name>/SKILL.md` for each one's full spec) — this repo is both the tooling and its first real, executed application.

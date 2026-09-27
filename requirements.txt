@@ -1,8 +1,8 @@
-pytest==8.3.3
-pytest-rerunfailures
-pytest-xdist
-requests
-python-dotenv
-PyYAML
-allure-pytest
-jsonschema
+pytest==9.1.1
+pytest-rerunfailures==16.7
+pytest-xdist==3.8.0
+requests==2.34.2
+python-dotenv==1.2.3
+PyYAML==6.0.3
+allure-pytest==2.16.1
+jsonschema==4.26.0

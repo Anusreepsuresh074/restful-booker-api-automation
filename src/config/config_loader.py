@@ -10,7 +10,7 @@ class ConfigLoader:
     """Single place every layer reads environment config through — never config.yaml directly."""
 
     def __init__(self, env: str):
-        with open(_CONFIG_PATH, "r") as f:
+        with open(_CONFIG_PATH) as f:
             all_envs = yaml.safe_load(f)
 
         if env not in all_envs:

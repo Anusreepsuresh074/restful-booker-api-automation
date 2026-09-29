@@ -20,6 +20,10 @@ Most "API testing" demos stop at asserting a status code. This one goes further,
 - **No fabricated assertions** — a few of this API's behaviors weren't documented anywhere upfront (what does `POST /auth` return on bad credentials? what happens if you `PUT` with a partial body?). Rather than guessing, those test cases were written to assert conservatively, then run live to observe the real answer — see `context/schema-validation-report.md` for exactly what was found.
 - **Shared-instance-safe test data** — this is a public, shared demo API that resets every ~10 minutes. Every test creates its own uniquely-named data and only ever asserts on what it created, never on exact totals.
 
+**Defects:** none pinned. The API's surprises (`DELETE` returns `201`, error bodies are plain text, not JSON) are documented behaviour, so the tests assert them as such; see `context/schema-validation-report.md`.
+
+Its companion is my [DummyJSON API suite](https://github.com/Anusreepsuresh074/ecommerce-api-automation), built with the same skills against a very different auth model (JWT with refresh and expiry).
+
 ## Architecture
 
 A layered structure, so a change to one thing (a field name, an endpoint path) means editing exactly one file, not twenty:

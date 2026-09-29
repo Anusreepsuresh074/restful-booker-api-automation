@@ -1,29 +1,22 @@
 ---
 name: api-automation-agent
-description: Use for this project's API test automation lifecycle — discovering API context, resolving auth, designing test cases, generating pytest scripts, and validating response schemas. TEMPLATE FILE: copy this into the target project's .claude/agents/api-automation-agent.md and fill in the "Project config" section before use — do not use this file as-is.
+description: Use for this project's API test automation lifecycle — discovering API context, resolving auth, designing test cases, generating pytest scripts, and validating response schemas.
 tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
-# API Automation Agent — <PROJECT NAME>
+# API Automation Agent — Restful-Booker
 
 You run the API test automation workflow for this project by invoking the shared skills below, in order, feeding each one's output into the next. The skills themselves are common across every project in this suite and live in `skills/` — don't fork or edit a skill's own `SKILL.md` to fit one project. If this project needs different behavior, say so in "Project overrides" below instead.
 
-## How to use this template
+## Project config
 
-1. Copy this file to the target project's `.claude/agents/api-automation-agent.md`.
-2. Fill in every `<FILL IN>` placeholder in **Project config**.
-3. Leave **Shared skills** and **Skill sequence** as-is unless this project genuinely can't follow the standard order — that's the part meant to stay identical across projects.
-4. Add anything project-specific that changes a skill's default behavior under **Project overrides**, rather than editing the shared skill file.
-
-## Project config (EDIT PER PROJECT)
-
-- **Project name:** <FILL IN>
-- **API base URL(s):** <FILL IN — e.g. dev / staging / prod endpoints>
-- **Auth type:** <FILL IN — e.g. Bearer JWT, API key, OAuth2 client-credentials; detail goes in `get-api-auth`'s own run, just name the type here>
-- **Primary language/framework:** Python + pytest (suite default — change if this project uses something else, and note it so `get-context`'s framework detection isn't surprised)
-- **Doc/artifact locations:** `artifacts/` for PRDs (default) — <FILL IN if this project's docs live somewhere else, or if there are additional locations>
-- **Team / owner:** <FILL IN>
-- **Repo path for generated tests:** <FILL IN — where `pytest-api` should write generated test files>
+- **Project name:** Restful-Booker practice API (public demo service for API test-automation practice)
+- **API base URL(s):** `https://restful-booker.herokuapp.com` — one public environment, no separate dev/staging/prod. `config/config.yaml`'s `dev` entry points here; `staging`/`prod` are not applicable and stay unused.
+- **Auth type:** Custom token-based (not standard Bearer) — `POST /auth` with `{username, password}` returns `{"token": "..."}`; protected write endpoints accept either a `Cookie: token=<token>` header or HTTP Basic auth. Full detail resolved by `get-api-auth`.
+- **Primary language/framework:** Python + pytest (suite default).
+- **Doc/artifact locations:** No PRD/Jira/Figma — this is a public demo service with published API docs at `https://restful-booker.herokuapp.com/apidoc/index.html`. `get-context` treats those docs as the primary source instead of a repo (no source repo is available for this service).
+- **Team / owner:** Personal project (Anusree P).
+- **Repo path for generated tests:** This repo's own `tests/` and `src/` (already scaffolded).
 
 ## Shared skills this agent uses
 
@@ -63,11 +56,11 @@ Re-run `get-context` (step 2) whenever the API or its requirements change — st
 
 **Where the optional/ongoing skills fit in:** `coverage-audit` and `change-impact-analysis` slot in around steps 4–5 (after the matrix exists, or whenever step 2 regenerates) but never block step 5. `flaky-test-triage` runs any time run artifacts exist, and is most useful once the project has accumulated a few runs' worth of history — neither is a checkpoint the core sequence waits on.
 
-## Project overrides (EDIT PER PROJECT, optional)
+## Project overrides
 
-Use this section for anything where this project's needs genuinely differ from a shared skill's default — e.g. a non-Python test stack, a non-standard doc location, an extra discovery source. State the override and which skill it affects; don't silently reinterpret the skill's instructions elsewhere.
-
-- <FILL IN, or "none" if this project follows every shared skill's defaults as written>
+- **No target repo available** (affects `get-context`): Restful-Booker is a hosted public demo service with no source repo to mine. `get-context` falls back straight to its published API docs page (`/apidoc/index.html`) as the API-shape source, and has no README/comments/validation-logic signal to mine for business rules — the "Repo-derived signal" section of its output will read "repo not available."
+- **No PRD/Jira/Figma** (affects `get-context`): this is a self-contained demo API with no product requirements doc. Business rules (e.g. required booking fields) come entirely from the API docs' documented request/response shapes, not from a separate requirements source.
+- **Single environment** (affects `create-framework-structure`'s config, `ci-integration`): only one real base URL exists. `config/config.yaml`'s `dev` entry is used for everything; `staging`/`prod` stay defined but unused rather than pointed at fabricated URLs.
 
 ## Guardrails
 

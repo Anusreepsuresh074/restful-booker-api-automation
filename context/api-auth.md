@@ -13,7 +13,7 @@ Neither mechanism is a standard `Authorization: Bearer <token>` header — the t
 
 ## Swagger/OpenAPI findings
 
-No OpenAPI/Swagger spec file is reachable as static JSON/YAML — `apidoc/index.html` is a client-rendered SPA (apiDoc tool), and its underlying `api_data.json` data file doesn't include a `securitySchemes`/`securityDefinitions` block (apiDoc doesn't model auth that way). Auth behavior below comes from the apiDoc data file's per-endpoint notes plus the Field Guide document (`/home/anusree/Downloads/Restful-Booker Field Guide.pdf`), whose author states every request/response pair — including the unauthenticated-vs-authenticated `PUT` calls — was exercised live against the running API, not copied from a doc page.
+No OpenAPI/Swagger spec file is reachable as static JSON/YAML — `apidoc/index.html` is a client-rendered SPA (apiDoc tool), and its underlying `api_data.json` data file doesn't include a `securitySchemes`/`securityDefinitions` block (apiDoc doesn't model auth that way). Auth behavior below comes from the apiDoc data file's per-endpoint notes plus the Field Guide document (the *Restful-Booker Field Guide* PDF (a third-party guide, not included in this repo)), whose author states every request/response pair — including the unauthenticated-vs-authenticated `PUT` calls — was exercised live against the running API, not copied from a doc page.
 
 ## Auth endpoint(s)
 

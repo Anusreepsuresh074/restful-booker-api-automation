@@ -5,20 +5,20 @@
 
 A Python + pytest API test automation suite for [Restful-Booker](https://restful-booker.herokuapp.com) — a public practice API simulating a hotel booking system (login, then full CRUD on a booking resource).
 
-**27 tests**, covering all 8 endpoints across happy-path, negative, boundary, auth/authz, and contract/schema cases — each traced back to a documented business rule. Every write is verified with a follow-up read (not just trusted on its own response), and every response is checked against a resolved JSON Schema, not just a status code. Results are reported through [Allure](https://allurereport.org/).
+**29 tests**, covering all 8 endpoints across happy-path, negative, boundary, auth/authz, and contract/schema cases — each traced to a documented rule or an explicitly tagged assumption. Every write, including every rejected one, is verified with a follow-up read (not just trusted on its own response), and every success response is checked against a resolved JSON Schema, not just a status code. Results are reported through [Allure](https://allurereport.org/).
 
 ```
-27 passed in ~20s (parallel, -n auto)  →  https://restful-booker.herokuapp.com (live)
+29 passed in ~14s (parallel, -n auto)  →  https://restful-booker.herokuapp.com (live)
 ```
 
 ## Why this project
 
 Most "API testing" demos stop at asserting a status code. This one goes further, on purpose:
 
-- **Read-your-write verification** — a `2xx` on `POST`/`PUT`/`PATCH`/`DELETE` only proves the server *accepted* the request, not that it *persisted*. Every write test follows up with a real `GET` (or, for deletes, confirms a `404`) to prove the change actually stuck.
-- **Contract/schema validation, not just status codes** — every response is checked against a resolved JSON Schema (required fields, types, no undocumented extra fields), so a silently-renamed field or a type change gets caught even if the status code still looks fine.
-- **No fabricated assertions** — a few of this API's behaviors weren't documented anywhere upfront (what does `POST /auth` return on bad credentials? what happens if you `PUT` with a partial body?). Rather than guessing, those test cases were written to assert conservatively, then run live to observe the real answer — see `context/schema-validation-report.md` for exactly what was found.
-- **Shared-instance-safe test data** — this is a public, shared demo API that resets every ~10 minutes. Every test creates its own uniquely-named data and only ever asserts on what it created, never on exact totals.
+- **Read-your-write verification** — a `2xx` on `POST`/`PUT`/`PATCH`/`DELETE` only proves the server *accepted* the request, not that it *persisted*. Every write test follows up with a real `GET` (or, for deletes, confirms a `404`) to prove the change actually stuck — and every write rejected with `403` re-reads the booking to prove it was left untouched.
+- **Contract/schema validation, not just status codes** — every success response is checked against a resolved JSON Schema (required fields, types, no undocumented extra fields), so a silently-renamed field or a type change gets caught even if the status code still looks fine.
+- **No fabricated assertions** — a few of this API's behaviors weren't documented anywhere upfront (what does `POST /auth` return on bad credentials? what happens if you `PUT` with a partial body?). Rather than guessing, those test cases were first written to assert conservatively, run live to observe the real answer, then tightened to assert exactly that — see `context/schema-validation-report.md` for what was found.
+- **Shared-instance-safe test data** — this is a public, shared demo API that resets every ~10 minutes. Every test creates its own uniquely-named data, only ever asserts on what it created (never on exact totals), and deletes it again at teardown, so a run leaves nothing behind.
 
 **Defects:** none pinned. The API's surprises (`DELETE` returns `201`, error bodies are plain text, not JSON) are documented behaviour, so the tests assert them as such; see `context/schema-validation-report.md`.
 
@@ -39,7 +39,7 @@ src/
     └── assert_helper.py   # the ONE place every assertion goes through
 tests/
 ├── ping/, auth/, booking/ # the actual test files, one method per test case
-└── conftest.py            # shared fixtures: auth token, headers, helper instances
+└── conftest.py            # shared fixtures: auth token, headers, helper instances, per-test cleanup
 ```
 
 No test or helper ever calls `requests` directly, and no test ever writes a bare `assert` — both funnel through `ApiBase` and `AssertHelper` respectively, which keeps every request/response logged and Allure-attached (with credentials redacted) and every failure message specific enough to debug without re-running anything.
@@ -81,7 +81,7 @@ allure open reports/allure-report
 Run just the fast smoke subset, or the full marked regression suite:
 ```bash
 pytest -m smoke        # 9 tests — the fast, PR-gating subset
-pytest -m regression   # all 27 — every test carries this marker
+pytest -m regression   # all 29 — every test carries this marker
 pytest -n auto         # in parallel, one worker per CPU core
 ruff check . && ruff format --check .   # lint
 ```
@@ -93,7 +93,7 @@ ruff check . && ruff format --check .   # lint
 - **Lint** (ruff check + format) gates every run.
 - **Smoke suite** on every push and PR — the fast gate, with a JUnit test summary on the run page.
 - **Full regression suite** nightly at 02:00 UTC and on demand (Actions → CI → Run workflow).
-- **Allure report** with run-over-run history, published to [GitHub Pages](https://anusreepsuresh074.github.io/restful-booker-api-automation/) after every non-PR run.
+- **Allure report** with run-over-run history, published to [GitHub Pages](https://anusreepsuresh074.github.io/restful-booker-api-automation/) after every full regression run (nightly and on demand), so the live report always shows all 29 tests.
 - **Dependabot** proposes dependency and action updates weekly.
 
 It needs two repository secrets (Settings → Secrets and variables → Actions): `AUTH_USERNAME` and `AUTH_PASSWORD`.
@@ -104,7 +104,7 @@ It needs two repository secrets (Settings → Secrets and variables → Actions)
 |---|---|
 | `context/api-context.md` | Resolved API surface + business rules (endpoints, auth, quirks like `DELETE` returning `201`) |
 | `context/api-auth.md` | How authentication works, token handling, negative-auth states |
-| `context/test-case-matrix.md` | The 27-row test case inventory this suite was built from, each row traced to a rule |
+| `context/test-case-matrix.md` | The 29-row test case inventory this suite was built from, each row traced to a rule or a tagged assumption |
 | `context/schema-validation-report.md` | Live findings from actually running the suite — including behaviors that were unconfirmed until observed |
 | `src/`, `tests/` | The framework and test suite itself |
 | `config/config.yaml` | Environment config (this API only really has one: the shared public instance) |

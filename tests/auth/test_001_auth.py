@@ -22,28 +22,26 @@ class TestAuth:
 
     @allure.story("Wrong credentials do not mint a token")
     def test_auth_rejects_wrong_credentials(self, auth_helper):
-        """context/api-auth.md Open Questions: exact response for bad /auth credentials is
-        unconfirmed — do not assume 403 or 200-with-error. Asserts only that wrong credentials
-        never yield a usable token; tighten to an exact status once a live call confirms it.
+        """Observed live (context/schema-validation-report.md row 6, context/api-auth.md): this API
+        answers bad credentials with `200 OK` and `{"reason": "Bad credentials"}`, not a 4xx.
         case: TC-post-auth-negative-wrong-credentials"""
         response = auth_helper.authenticate_raw(auth_payload_wrong_credentials())
-        if response.status_code == 200:
-            body = response.json()
-            assert not body.get("token"), f"Wrong credentials must not yield a usable token. Body: {body}"
-        else:
-            AssertHelper.assert_status_code_in(response, [400, 401, 403])
+        AssertHelper.assert_status_code(response, 200)
+        body = response.json()
+        AssertHelper.assert_field_absent(body, "token")
+        AssertHelper.assert_equals(body, {"reason": "Bad credentials"}, context="auth failure body ")
 
     @allure.story("Missing password field is rejected")
     def test_auth_rejects_missing_password_field(self, auth_helper):
         """[Assumption] both fields are stated required but no documented rejection behavior
-        exists — same unconfirmed-status handling as the wrong-credentials case above.
+        exists. Observed live (context/schema-validation-report.md row 7): a missing `password` is
+        treated exactly like wrong credentials — `200 OK` and `{"reason": "Bad credentials"}`.
         case: TC-post-auth-boundary-missing-password-field"""
         response = auth_helper.authenticate_raw(auth_payload_missing_password())
-        if response.status_code == 200:
-            body = response.json()
-            assert not body.get("token"), f"Missing password must not yield a usable token. Body: {body}"
-        else:
-            AssertHelper.assert_status_code_in(response, [400, 401, 403])
+        AssertHelper.assert_status_code(response, 200)
+        body = response.json()
+        AssertHelper.assert_field_absent(body, "token")
+        AssertHelper.assert_equals(body, {"reason": "Bad credentials"}, context="auth failure body ")
 
     @allure.story("Success response has exactly the documented token shape")
     def test_auth_response_matches_token_schema(self, auth_helper):

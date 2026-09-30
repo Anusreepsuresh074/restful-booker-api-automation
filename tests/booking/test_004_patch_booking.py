@@ -17,6 +17,14 @@ class TestPatchBooking:
         resource_registry("booking", booking_id)
         return booking_id, original_payload
 
+    @staticmethod
+    def _assert_booking_unchanged(booking_helper, booking_id, original_payload):
+        # read-your-write for a rejected write: the booking must still be exactly as created
+        readback = booking_helper.get_booking_by_id(booking_id)
+        AssertHelper.assert_equals(
+            readback.json(), original_payload, context=f"booking {booking_id} after rejected PATCH "
+        )
+
     @pytest.mark.smoke
     @allure.story("RULE-booking-write-requires-token: partial update changes only the sent fields")
     def test_partial_update_booking_with_valid_token(self, booking_helper, resource_registry, auth_cookie_header):
@@ -37,20 +45,22 @@ class TestPatchBooking:
     @allure.story("RULE-booking-write-requires-token: PATCH enforces the same auth requirement as PUT")
     def test_partial_update_booking_rejected_without_token(self, booking_helper, resource_registry):
         """case: TC-patch-booking-id-authauthz-missing-token"""
-        booking_id, _ = self._create_booking(booking_helper, resource_registry)
+        booking_id, original_payload = self._create_booking(booking_helper, resource_registry)
         booking_helper.partial_update_booking(
             booking_id, booking_partial_update_payload(), headers=None, status_code=403
         )
+        self._assert_booking_unchanged(booking_helper, booking_id, original_payload)
 
     @allure.story("RULE-booking-write-requires-token: malformed token rejected on PATCH too")
     def test_partial_update_booking_rejected_with_invalid_token(
         self, booking_helper, resource_registry, invalid_auth_cookie_header
     ):
         """case: TC-patch-booking-id-authauthz-invalid-token"""
-        booking_id, _ = self._create_booking(booking_helper, resource_registry)
+        booking_id, original_payload = self._create_booking(booking_helper, resource_registry)
         booking_helper.partial_update_booking(
             booking_id, booking_partial_update_payload(), headers=invalid_auth_cookie_header, status_code=403
         )
+        self._assert_booking_unchanged(booking_helper, booking_id, original_payload)
 
     @allure.story("Partial-update response has exactly the documented Booking shape")
     def test_partial_update_booking_response_matches_schema(

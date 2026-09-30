@@ -24,9 +24,7 @@ class TestGetBooking:
             params={"firstname": payload["firstname"], "lastname": payload["lastname"]}
         )
         returned_ids = [item["bookingid"] for item in filter_response.json()]
-        assert booking_id in returned_ids, (
-            f"Expected created booking id {booking_id} in filtered results {returned_ids}"
-        )
+        AssertHelper.assert_contains(returned_ids, booking_id, context="filtered booking ids ")
 
     @pytest.mark.smoke
     @allure.story("Unfiltered list endpoint responds correctly")
@@ -38,7 +36,7 @@ class TestGetBooking:
     @allure.story("A filter matching nothing degrades gracefully instead of erroring")
     def test_get_booking_filter_no_matches_returns_empty(self, booking_helper):
         """[Assumption] empty-result behavior isn't explicitly documented — matrix's own inferred
-        expectation (200 + empty array), pending live confirmation before treated as fact.
+        expectation (200 + empty array), confirmed live (context/schema-validation-report.md row 10).
         case: TC-get-booking-boundary-filter-no-matches"""
         no_match_name = f"NoMatch{uuid.uuid4().hex}"
         response = booking_helper.list_bookings(params={"firstname": no_match_name})
@@ -71,3 +69,17 @@ class TestGetBooking:
         booking_id = create_response.json()["bookingid"]
         resource_registry("booking", booking_id)
         booking_helper.get_booking_by_id(booking_id)
+
+    @allure.story("A booking id that does not exist returns 404")
+    def test_get_booking_by_nonexistent_id_returns_404(self, booking_helper, resource_registry, auth_cookie_header):
+        """Observed live (context/schema-validation-report.md row 23): `404`, plain-text body
+        `Not Found`. The id is made nonexistent deterministically — created, then deleted — rather
+        than guessed, since on a shared instance any guessed id could be someone else's booking.
+        case: TC-get-booking-id-negative-nonexistent-id"""
+        create_response = booking_helper.create_booking(booking_payload_unique())
+        booking_id = create_response.json()["bookingid"]
+        resource_registry("booking", booking_id)
+        booking_helper.delete_booking(booking_id, headers=auth_cookie_header, status_code=201)
+
+        response = booking_helper.get_booking_by_id(booking_id, status_code=404)
+        AssertHelper.assert_equals(response.text, "Not Found", context="404 body ")

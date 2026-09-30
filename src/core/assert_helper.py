@@ -56,6 +56,10 @@ class AssertHelper:
         assert field in body, f"Expected field {path}{field} to be present. Full body: {body}"
 
     @staticmethod
+    def assert_field_absent(body: dict, field: str, path: str = ""):
+        assert field not in body, f"Expected field {path}{field} to be absent. Full body: {body}"
+
+    @staticmethod
     def assert_field_type(body: dict, field: str, expected_type, path: str = ""):
         value = body.get(field)
         assert isinstance(value, expected_type), (

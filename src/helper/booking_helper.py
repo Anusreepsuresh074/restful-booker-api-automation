@@ -37,28 +37,40 @@ class BookingHelper:
             AssertHelper.assert_schema(response.json(), BOOKING_SCHEMA)
         return response
 
-    @allure.step("Full-replace update a booking (PUT)")
+    # The write methods below take auth headers (Cookie token / Basic auth), so their steps are
+    # context managers rather than `@allure.step` — the decorator would record `headers` as a
+    # step parameter and publish the credential in the report.
     def update_booking(self, booking_id, payload: dict, headers: dict = None, status_code: int = 200):
-        response = self.api_base.put(BOOKING_BY_ID.format(id=booking_id), json=payload, headers=headers)
-        AssertHelper.assert_status_code(response, status_code)
-        if status_code == 200:
-            AssertHelper.assert_schema(response.json(), BOOKING_SCHEMA)
-        return response
+        with allure.step(f"Full-replace update booking {booking_id} (PUT)"):
+            response = self.api_base.put(BOOKING_BY_ID.format(id=booking_id), json=payload, headers=headers)
+            AssertHelper.assert_status_code(response, status_code)
+            if status_code == 200:
+                AssertHelper.assert_schema(response.json(), BOOKING_SCHEMA)
+            return response
 
-    @allure.step("Attempt a full-replace update without asserting a specific outcome")
     def attempt_update_booking_raw(self, booking_id, payload: dict, headers: dict = None):
-        return self.api_base.put(BOOKING_BY_ID.format(id=booking_id), json=payload, headers=headers)
+        with allure.step(f"Attempt a full-replace update of booking {booking_id} without asserting an outcome"):
+            return self.api_base.put(BOOKING_BY_ID.format(id=booking_id), json=payload, headers=headers)
 
-    @allure.step("Partially update a booking (PATCH)")
     def partial_update_booking(self, booking_id, payload: dict, headers: dict = None, status_code: int = 200):
-        response = self.api_base.patch(BOOKING_BY_ID.format(id=booking_id), json=payload, headers=headers)
-        AssertHelper.assert_status_code(response, status_code)
-        if status_code == 200:
-            AssertHelper.assert_schema(response.json(), BOOKING_SCHEMA)
-        return response
+        with allure.step(f"Partially update booking {booking_id} (PATCH)"):
+            response = self.api_base.patch(BOOKING_BY_ID.format(id=booking_id), json=payload, headers=headers)
+            AssertHelper.assert_status_code(response, status_code)
+            if status_code == 200:
+                AssertHelper.assert_schema(response.json(), BOOKING_SCHEMA)
+            return response
 
-    @allure.step("Delete a booking")
     def delete_booking(self, booking_id, headers: dict = None, status_code: int = 201):
-        response = self.api_base.delete(BOOKING_BY_ID.format(id=booking_id), headers=headers)
-        AssertHelper.assert_status_code(response, status_code)
-        return response
+        with allure.step(f"Delete booking {booking_id}"):
+            response = self.api_base.delete(BOOKING_BY_ID.format(id=booking_id), headers=headers)
+            AssertHelper.assert_status_code(response, status_code)
+            return response
+
+    def cleanup_booking(self, booking_id, headers: dict):
+        """Teardown delete for a booking a test created. Tolerates one the test already deleted
+        (or the shared instance's ~10-minute reset removed): this API answers `405` for a DELETE
+        on a nonexistent id, and `404` is accepted too in case that ever changes."""
+        with allure.step(f"Clean up booking {booking_id}"):
+            response = self.api_base.delete(BOOKING_BY_ID.format(id=booking_id), headers=headers)
+            AssertHelper.assert_status_code_in(response, [201, 404, 405])
+            return response

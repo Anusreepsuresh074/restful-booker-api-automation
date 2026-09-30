@@ -59,11 +59,14 @@ def basic_auth_wrong_password_header():
     return {"Authorization": f"Basic {encoded}"}
 
 
-@pytest.fixture(scope="session")
-def resource_registry(config):
-    """Persists created-resource entries to reports/created-resources.jsonl immediately, so a
-    mid-run crash doesn't lose track of what was created. `teardown` (separate skill, explicit
-    user confirmation only) is the only thing that ever clears entries from this file."""
+@pytest.fixture
+def resource_registry(config, booking_helper, auth_cookie_header):
+    """Records each resource a test creates, then deletes it when that test finishes, so a run
+    leaves nothing behind on the shared instance. Entries are also appended to
+    reports/created-resources.jsonl immediately, so a mid-run crash (where this teardown never
+    runs) still leaves a record for the `teardown` skill to clear later, with explicit user
+    confirmation."""
+    created = []
 
     def record(resource_type: str, resource_id) -> None:
         _REGISTRY_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -75,5 +78,10 @@ def resource_registry(config):
         }
         with open(_REGISTRY_PATH, "a") as f:
             f.write(json.dumps(entry) + "\n")
+        created.append((resource_type, resource_id))
 
-    return record
+    yield record
+
+    for resource_type, resource_id in reversed(created):
+        if resource_type == "booking":
+            booking_helper.cleanup_booking(resource_id, headers=auth_cookie_header)

@@ -44,7 +44,7 @@ Content-Type: application/json
   - Calling a write endpoint (`PUT`/`PATCH`/`DELETE` on `/booking/{id}`) with **no** `Cookie`/`Authorization` header at all → `403 Forbidden`.
   - Calling with a **malformed/invalid token** value → `403 Forbidden` (same shape as the no-token case; the API doesn't distinguish "missing" from "invalid" in its response).
   - Basic auth with a **wrong password** → `403 Forbidden`.
-  - `POST /auth` itself with a wrong username/password was **not** captured in either source with its exact response shape — flagged under Open questions below rather than assumed.
+  - `POST /auth` itself with a wrong username/password, or with the `password` field missing → `200 OK` with body `{"reason": "Bad credentials"}` and no `token` (the API does not distinguish the two). Not documented in either source — **confirmed by live observation** (`context/schema-validation-report.md` rows 6–7).
 
 ## Token storage & fixture naming
 
@@ -70,6 +70,6 @@ Content-Type: application/json
 
 ## Open questions / follow-ups
 
-- `POST /auth` with wrong/missing credentials: neither source captured the exact response status/shape for this case (only the write-endpoint 403 behavior is documented). `pytest-api` will need to make one live call to observe this before asserting on it exactly — flagging rather than assuming it's also a plain `403` or `200` with an error body.
+- ~~`POST /auth` with wrong/missing credentials: exact response status/shape not captured in either source~~ — **resolved**: observed live as `200 OK` + `{"reason": "Bad credentials"}` for both cases (`context/schema-validation-report.md` rows 6–7); see Response validation above.
 - No way exists to obtain a genuinely expired token on this API (no TTL, no refresh, no override) — any "expired token" test case in `api-test-design`'s matrix should be dropped or explicitly marked as not applicable to this API, rather than simulated.
 - Wrong-role and permission/plan-scoped negative states don't apply to this API at all (no roles, no orgs, no plans) — `api-test-design` should not generate those case types for auth-authz coverage here.

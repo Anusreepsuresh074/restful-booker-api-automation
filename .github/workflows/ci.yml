@@ -1,8 +1,8 @@
 name: CI
 
 # Lint gates everything. Every push / PR runs the fast smoke suite; the full regression
-# suite runs nightly and on demand. Every non-PR run publishes an Allure report (with
-# run-over-run history) to GitHub Pages.
+# suite runs nightly and on demand, and only those full runs publish the Allure report (with
+# run-over-run history) to GitHub Pages — so the live report always shows the whole suite.
 #
 # Requires two repository secrets (Settings -> Secrets and variables -> Actions):
 # AUTH_USERNAME and AUTH_PASSWORD — the published demo credentials POST /auth needs.
@@ -110,11 +110,13 @@ jobs:
           retention-days: 14
 
   # Builds the Allure report, keeps run-over-run history (trend graphs) and
-  # publishes it to GitHub Pages (gh-pages branch). Skipped for pull requests.
+  # publishes it to GitHub Pages (gh-pages branch). Full regression runs only (nightly and
+  # on demand): a push runs just the smoke subset, and publishing that would replace the
+  # full report with a partial one.
   # One-time repo setup: Settings -> Pages -> Deploy from branch -> gh-pages.
   allure-report:
-    needs: [smoke, regression]
-    if: always() && github.event_name != 'pull_request'
+    needs: [regression]
+    if: always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -122,9 +124,8 @@ jobs:
       - name: Download Allure results
         uses: actions/download-artifact@v8
         with:
-          pattern: allure-results-*
+          name: allure-results-regression
           path: allure-results
-          merge-multiple: true
 
       - name: Fetch previous report (for history)
         uses: actions/checkout@v7

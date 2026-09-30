@@ -1,0 +1,2 @@
+INFO     src.core.api_base:api_base.py:49 GET https://restful-booker.herokuapp.com/ping | params=None | json=None
+INFO     src.core.api_base:api_base.py:61 -> 201 Created

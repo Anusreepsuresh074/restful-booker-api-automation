@@ -1,0 +1,3 @@
+POST https://restful-booker.herokuapp.com/auth
+params=None
+json={'username': 'not-a-real-user', 'password': '***'}

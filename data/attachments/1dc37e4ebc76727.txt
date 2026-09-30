@@ -1,0 +1,2 @@
+INFO     src.core.api_base:api_base.py:49 POST https://restful-booker.herokuapp.com/auth | params=None | json={'username': 'not-a-real-user', 'password': '***'}
+INFO     src.core.api_base:api_base.py:61 -> 200 {"reason": "Bad credentials"}

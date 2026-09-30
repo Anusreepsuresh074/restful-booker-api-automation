@@ -1,3 +1,5 @@
+import json as jsonlib
+
 import allure
 import requests
 
@@ -17,6 +19,16 @@ def _redact(value):
     return value
 
 
+def _redact_body(response) -> str:
+    """Response-side counterpart of `_redact`: POST /auth answers with a live session token,
+    which must not land in a log or attachment either. Plain-text bodies pass through as-is."""
+    try:
+        body = response.json()
+    except ValueError:
+        return response.text[:500]
+    return jsonlib.dumps(_redact(body))[:500]
+
+
 class ApiBase:
     """Every HTTP call in this framework goes through here — never raw requests/httpx in tests or helpers."""
 
@@ -27,24 +39,28 @@ class ApiBase:
     def _url(self, path: str) -> str:
         return f"{self.base_url}{path}"
 
-    @allure.step("{method} {path}")
     def _request(self, method: str, path: str, headers=None, params=None, json=None, **kwargs):
-        url = self._url(path)
-        redacted_json = _redact(json)
-        logger.info("%s %s | params=%s | json=%s", method, url, params, redacted_json)
-        self._attach("Request", f"{method} {url}\nparams={params}\njson={redacted_json}")
-        response = requests.request(
-            method=method,
-            url=url,
-            headers=headers,
-            params=params,
-            json=json,
-            timeout=self.timeout,
-            **kwargs,
-        )
-        logger.info("-> %s %s", response.status_code, response.text[:500])
-        self._attach("Response", f"status_code={response.status_code}\n{response.text[:500]}")
-        return response
+        # A context-manager step, not `@allure.step`: the decorator records every argument as a
+        # step parameter, which would publish the raw json body (password) and headers (Cookie
+        # token, Basic auth) in the report and bypass the redaction below.
+        with allure.step(f"{method} {path}"):
+            url = self._url(path)
+            redacted_json = _redact(json)
+            logger.info("%s %s | params=%s | json=%s", method, url, params, redacted_json)
+            self._attach("Request", f"{method} {url}\nparams={params}\njson={redacted_json}")
+            response = requests.request(
+                method=method,
+                url=url,
+                headers=headers,
+                params=params,
+                json=json,
+                timeout=self.timeout,
+                **kwargs,
+            )
+            redacted_body = _redact_body(response)
+            logger.info("-> %s %s", response.status_code, redacted_body)
+            self._attach("Response", f"status_code={response.status_code}\n{redacted_body}")
+            return response
 
     @staticmethod
     def _attach(name: str, body: str) -> None:

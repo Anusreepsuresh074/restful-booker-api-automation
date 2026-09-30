@@ -10,17 +10,19 @@ class AuthHelper:
     def __init__(self, api_base):
         self.api_base = api_base
 
-    @allure.step("Authenticate and get a token")
+    # Steps here are context managers, not `@allure.step`, so the credentials passed in are
+    # never recorded as Allure step parameters (ApiBase attaches the redacted request instead).
     def authenticate(self, username: str = None, password: str = None, status_code: int = 200):
-        response = self.api_base.post(AUTH, json=auth_payload(username, password))
-        AssertHelper.assert_status_code(response, status_code)
-        if status_code == 200:
-            AssertHelper.assert_schema(response.json(), AUTH_TOKEN_SCHEMA)
-        return response
+        with allure.step("Authenticate and get a token"):
+            response = self.api_base.post(AUTH, json=auth_payload(username, password))
+            AssertHelper.assert_status_code(response, status_code)
+            if status_code == 200:
+                AssertHelper.assert_schema(response.json(), AUTH_TOKEN_SCHEMA)
+            return response
 
-    @allure.step("Attempt authentication with an arbitrary payload, no status assumed")
     def authenticate_raw(self, payload: dict):
-        return self.api_base.post(AUTH, json=payload)
+        with allure.step("Attempt authentication with an arbitrary payload, no status assumed"):
+            return self.api_base.post(AUTH, json=payload)
 
     @staticmethod
     def cookie_header(token: str) -> dict:

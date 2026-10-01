@@ -1,3 +1,0 @@
-PUT https://restful-booker.herokuapp.com/booking/4952
-params=None
-json={'firstname': 'Fnd960ddebe5', 'lastname': 'Ln11b4528110', 'totalprice': 111, 'depositpaid': True, 'bookingdates': {'checkin': '2026-01-01', 'checkout': '2026-01-05'}, 'additionalneeds': 'Breakfast'}

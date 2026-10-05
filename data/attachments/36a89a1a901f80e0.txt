@@ -1,0 +1,2 @@
+2026-10-05 07:52:13,349 | INFO | src.core.api_base | GET https://restful-booker.herokuapp.com/ping | params=None | json=None
+2026-10-05 07:52:13,549 | INFO | src.core.api_base | -> 201 Created

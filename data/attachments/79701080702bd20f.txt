@@ -1,3 +1,0 @@
-PATCH https://restful-booker.herokuapp.com/booking/3245
-params=None
-json={'firstname': 'Updated40772da3a2'}

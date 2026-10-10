@@ -1,55 +1,55 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"case: TC-patch-booking-id-authauthz-invalid-token","630","test_partial_update_booking_rejected_with_invalid_token","tests.booking","2026-10-09","passed","2026-10-09","TestPatchBooking","test_004_patch_booking","",""
+"case: TC-get-ping-happy-returns-201","45","test_ping_returns_health_check","tests.ping","2026-10-10","passed","2026-10-10","TestPingHealthCheck","test_001_health_check","",""
 "Observed live (context/schema-validation-report.md row 23): `404`, plain-text body
         `Not Found`. The id is made nonexistent deterministically — created, then deleted — rather
         than guessed, since on a shared instance any guessed id could be someone else's booking.
-        case: TC-get-booking-id-negative-nonexistent-id","642","test_get_booking_by_nonexistent_id_returns_404","tests.booking","2026-10-09","passed","2026-10-09","TestGetBooking","test_001_get_booking","",""
-"case: TC-post-booking-authauthz-no-auth-required","433","test_create_booking_succeeds_without_any_auth_header","tests.booking","2026-10-09","passed","2026-10-09","TestPostBooking","test_002_post_booking","",""
-"[Assumption] empty-result behavior isn't explicitly documented — matrix's own inferred
-        expectation (200 + empty array), confirmed live (context/schema-validation-report.md row 10).
-        case: TC-get-booking-boundary-filter-no-matches","214","test_get_booking_filter_no_matches_returns_empty","tests.booking","2026-10-09","passed","2026-10-09","TestGetBooking","test_001_get_booking","",""
-"Observed live (context/schema-validation-report.md row 6, context/api-auth.md): this API
-        answers bad credentials with `200 OK` and `{""reason"": ""Bad credentials""}`, not a 4xx.
-        case: TC-post-auth-negative-wrong-credentials","214","test_auth_rejects_wrong_credentials","tests.auth","2026-10-09","passed","2026-10-09","TestAuth","test_001_auth","",""
-"case: TC-put-booking-id-happy-full-replace","696","test_update_booking_full_replace_with_valid_token","tests.booking","2026-10-09","passed","2026-10-09","TestPutBooking","test_003_put_booking","",""
-"Endpoint inventory: PUT /booking/{id} (Booking response schema ref)
-        case: TC-put-booking-id-contract-schema-updated-booking-shape","423","test_update_booking_response_matches_schema","tests.booking","2026-10-09","passed","2026-10-09","TestPutBooking","test_003_put_booking","",""
+        case: TC-get-booking-id-negative-nonexistent-id","152","test_get_booking_by_nonexistent_id_returns_404","tests.booking","2026-10-10","passed","2026-10-10","TestGetBooking","test_001_get_booking","",""
+"case: TC-put-booking-id-authauthz-basic-wrong-password","179","test_update_booking_rejected_with_basic_auth_wrong_password","tests.booking","2026-10-10","passed","2026-10-10","TestPutBooking","test_003_put_booking","",""
 "Endpoint inventory: GET /booking/{id} (Booking response schema ref)
-        case: TC-get-booking-id-happy-fetch-existing","425","test_get_booking_by_id_returns_full_record","tests.booking","2026-10-09","passed","2026-10-09","TestGetBooking","test_001_get_booking","",""
-"Endpoint inventory: PATCH /booking/{id} (Booking response schema ref)
-        case: TC-patch-booking-id-contract-schema-updated-booking-shape","430","test_partial_update_booking_response_matches_schema","tests.booking","2026-10-09","passed","2026-10-09","TestPatchBooking","test_004_patch_booking","",""
-"case: TC-delete-booking-id-happy-valid-token-returns-201","661","test_delete_booking_with_valid_token_returns_201","tests.booking","2026-10-09","passed","2026-10-09","TestDeleteBooking","test_005_delete_booking","",""
-"case: TC-delete-booking-id-authauthz-missing-token","651","test_delete_booking_rejected_without_token","tests.booking","2026-10-09","passed","2026-10-09","TestDeleteBooking","test_005_delete_booking","",""
+        case: TC-get-booking-id-contract-schema-booking-shape","143","test_get_booking_by_id_matches_booking_schema","tests.booking","2026-10-10","passed","2026-10-10","TestGetBooking","test_001_get_booking","",""
+"case: TC-patch-booking-id-happy-partial-update","260","test_partial_update_booking_with_valid_token","tests.booking","2026-10-10","passed","2026-10-10","TestPatchBooking","test_004_patch_booking","",""
 "Endpoint inventory: GET /booking/{id} (Booking response schema ref)
-        case: TC-get-booking-id-contract-schema-booking-shape","438","test_get_booking_by_id_matches_booking_schema","tests.booking","2026-10-09","passed","2026-10-09","TestGetBooking","test_001_get_booking","",""
-"Endpoint inventory: POST /auth (AuthToken response schema ref)
-        case: TC-post-auth-happy-valid-credentials","231","test_auth_returns_token_for_valid_credentials","tests.auth","2026-10-09","passed","2026-10-09","TestAuth","test_001_auth","",""
-"[Assumption] both fields are stated required but no documented rejection behavior
-        exists. Observed live (context/schema-validation-report.md row 7): a missing `password` is
-        treated exactly like wrong credentials — `200 OK` and `{""reason"": ""Bad credentials""}`.
-        case: TC-post-auth-boundary-missing-password-field","227","test_auth_rejects_missing_password_field","tests.auth","2026-10-09","passed","2026-10-09","TestAuth","test_001_auth","",""
-"case: TC-get-ping-contract-schema-plain-text-body","211","test_ping_response_is_plain_text_not_json","tests.ping","2026-10-09","passed","2026-10-09","TestPingHealthCheck","test_001_health_check","",""
-"Endpoint inventory: GET /booking (BookingIdList response schema ref)
-        case: TC-get-booking-happy-list-all","381","test_get_booking_list_no_filters","tests.booking","2026-10-09","passed","2026-10-09","TestGetBooking","test_001_get_booking","",""
-"case: TC-get-booking-happy-filter-returns-created-id","451","test_get_booking_filter_returns_own_created_id","tests.booking","2026-10-09","passed","2026-10-09","TestGetBooking","test_001_get_booking","",""
+        case: TC-get-booking-id-happy-fetch-existing","148","test_get_booking_by_id_returns_full_record","tests.booking","2026-10-10","passed","2026-10-10","TestGetBooking","test_001_get_booking","",""
+"case: TC-get-ping-contract-schema-plain-text-body","51","test_ping_response_is_plain_text_not_json","tests.ping","2026-10-10","passed","2026-10-10","TestPingHealthCheck","test_001_health_check","",""
 "[Assumption] derived from RULE-booking-put-full-replace, which states PUT expects every
         field but not the exact rejection/overwrite behavior for a partial body. Observed live
         (context/schema-validation-report.md row 19): the request is rejected outright with `400`
         (plain-text `Bad Request`) and the booking is not modified.
-        case: TC-put-booking-id-boundary-partial-body-on-put","645","test_update_booking_put_with_partial_body","tests.booking","2026-10-09","passed","2026-10-09","TestPutBooking","test_003_put_booking","",""
+        case: TC-put-booking-id-boundary-partial-body-on-put","145","test_update_booking_put_with_partial_body","tests.booking","2026-10-10","passed","2026-10-10","TestPutBooking","test_003_put_booking","",""
+"Observed live (context/schema-validation-report.md row 6, context/api-auth.md): this API
+        answers bad credentials with `200 OK` and `{""reason"": ""Bad credentials""}`, not a 4xx.
+        case: TC-post-auth-negative-wrong-credentials","122","test_auth_rejects_wrong_credentials","tests.auth","2026-10-10","passed","2026-10-10","TestAuth","test_001_auth","",""
+"case: TC-delete-booking-id-happy-valid-token-returns-201","240","test_delete_booking_with_valid_token_returns_201","tests.booking","2026-10-10","passed","2026-10-10","TestDeleteBooking","test_005_delete_booking","",""
+"case: TC-post-booking-happy-create-valid","110","test_create_booking_with_valid_payload","tests.booking","2026-10-10","passed","2026-10-10","TestPostBooking","test_002_post_booking","",""
+"Endpoint inventory: POST /auth (AuthToken response schema ref)
+        case: TC-post-auth-happy-valid-credentials","65","test_auth_returns_token_for_valid_credentials","tests.auth","2026-10-10","passed","2026-10-10","TestAuth","test_001_auth","",""
+"Endpoint inventory: GET /booking (BookingIdList response schema ref)
+        case: TC-get-booking-happy-list-all","72","test_get_booking_list_no_filters","tests.booking","2026-10-10","passed","2026-10-10","TestGetBooking","test_001_get_booking","",""
 "Endpoint inventory: POST /booking (Booking response schema ref)
-        case: TC-post-booking-contract-schema-response-shape","211","test_create_booking_response_matches_schema","tests.booking","2026-10-09","passed","2026-10-09","TestPostBooking","test_002_post_booking","",""
-"case: TC-post-booking-happy-create-valid","439","test_create_booking_with_valid_payload","tests.booking","2026-10-09","passed","2026-10-09","TestPostBooking","test_002_post_booking","",""
-"case: TC-put-booking-id-authauthz-basic-wrong-password","629","test_update_booking_rejected_with_basic_auth_wrong_password","tests.booking","2026-10-09","passed","2026-10-09","TestPutBooking","test_003_put_booking","",""
-"case: TC-put-booking-id-authauthz-missing-token","638","test_update_booking_rejected_without_token","tests.booking","2026-10-09","passed","2026-10-09","TestPutBooking","test_003_put_booking","",""
+        case: TC-post-booking-contract-schema-response-shape","41","test_create_booking_response_matches_schema","tests.booking","2026-10-10","passed","2026-10-10","TestPostBooking","test_002_post_booking","",""
+"case: TC-patch-booking-id-authauthz-missing-token","146","test_partial_update_booking_rejected_without_token","tests.booking","2026-10-10","passed","2026-10-10","TestPatchBooking","test_004_patch_booking","",""
 "Observed live (context/schema-validation-report.md row 24): a DELETE on an id that no
         longer exists returns `405 Method Not Allowed` (plain-text body), not `404`. The id is made
         nonexistent deterministically by deleting the test's own booking first.
-        case: TC-delete-booking-id-negative-already-deleted","631","test_delete_booking_already_deleted_returns_405","tests.booking","2026-10-09","passed","2026-10-09","TestDeleteBooking","test_005_delete_booking","",""
-"case: TC-patch-booking-id-happy-partial-update","666","test_partial_update_booking_with_valid_token","tests.booking","2026-10-09","passed","2026-10-09","TestPatchBooking","test_004_patch_booking","",""
-"case: TC-put-booking-id-authauthz-invalid-token","629","test_update_booking_rejected_with_invalid_token","tests.booking","2026-10-09","passed","2026-10-09","TestPutBooking","test_003_put_booking","",""
-"case: TC-get-ping-happy-returns-201","212","test_ping_returns_health_check","tests.ping","2026-10-09","passed","2026-10-09","TestPingHealthCheck","test_001_health_check","",""
-"case: TC-patch-booking-id-authauthz-missing-token","665","test_partial_update_booking_rejected_without_token","tests.booking","2026-10-09","passed","2026-10-09","TestPatchBooking","test_004_patch_booking","",""
-"case: TC-delete-booking-id-authauthz-invalid-token","633","test_delete_booking_rejected_with_invalid_token","tests.booking","2026-10-09","passed","2026-10-09","TestDeleteBooking","test_005_delete_booking","",""
+        case: TC-delete-booking-id-negative-already-deleted","133","test_delete_booking_already_deleted_returns_405","tests.booking","2026-10-10","passed","2026-10-10","TestDeleteBooking","test_005_delete_booking","",""
+"case: TC-get-booking-happy-filter-returns-created-id","190","test_get_booking_filter_returns_own_created_id","tests.booking","2026-10-10","passed","2026-10-10","TestGetBooking","test_001_get_booking","",""
+"case: TC-put-booking-id-authauthz-invalid-token","184","test_update_booking_rejected_with_invalid_token","tests.booking","2026-10-10","passed","2026-10-10","TestPutBooking","test_003_put_booking","",""
 "Endpoint inventory: POST /auth (AuthToken response schema ref)
-        case: TC-post-auth-contract-schema-token-response","237","test_auth_response_matches_token_schema","tests.auth","2026-10-09","passed","2026-10-09","TestAuth","test_001_auth","",""
+        case: TC-post-auth-contract-schema-token-response","54","test_auth_response_matches_token_schema","tests.auth","2026-10-10","passed","2026-10-10","TestAuth","test_001_auth","",""
+"Endpoint inventory: PATCH /booking/{id} (Booking response schema ref)
+        case: TC-patch-booking-id-contract-schema-updated-booking-shape","125","test_partial_update_booking_response_matches_schema","tests.booking","2026-10-10","passed","2026-10-10","TestPatchBooking","test_004_patch_booking","",""
+"case: TC-put-booking-id-authauthz-missing-token","161","test_update_booking_rejected_without_token","tests.booking","2026-10-10","passed","2026-10-10","TestPutBooking","test_003_put_booking","",""
+"[Assumption] empty-result behavior isn't explicitly documented — matrix's own inferred
+        expectation (200 + empty array), confirmed live (context/schema-validation-report.md row 10).
+        case: TC-get-booking-boundary-filter-no-matches","88","test_get_booking_filter_no_matches_returns_empty","tests.booking","2026-10-10","passed","2026-10-10","TestGetBooking","test_001_get_booking","",""
+"case: TC-patch-booking-id-authauthz-invalid-token","187","test_partial_update_booking_rejected_with_invalid_token","tests.booking","2026-10-10","passed","2026-10-10","TestPatchBooking","test_004_patch_booking","",""
+"case: TC-put-booking-id-happy-full-replace","253","test_update_booking_full_replace_with_valid_token","tests.booking","2026-10-10","passed","2026-10-10","TestPutBooking","test_003_put_booking","",""
+"case: TC-delete-booking-id-authauthz-invalid-token","159","test_delete_booking_rejected_with_invalid_token","tests.booking","2026-10-10","passed","2026-10-10","TestDeleteBooking","test_005_delete_booking","",""
+"Endpoint inventory: PUT /booking/{id} (Booking response schema ref)
+        case: TC-put-booking-id-contract-schema-updated-booking-shape","87","test_update_booking_response_matches_schema","tests.booking","2026-10-10","passed","2026-10-10","TestPutBooking","test_003_put_booking","",""
+"case: TC-delete-booking-id-authauthz-missing-token","198","test_delete_booking_rejected_without_token","tests.booking","2026-10-10","passed","2026-10-10","TestDeleteBooking","test_005_delete_booking","",""
+"case: TC-post-booking-authauthz-no-auth-required","103","test_create_booking_succeeds_without_any_auth_header","tests.booking","2026-10-10","passed","2026-10-10","TestPostBooking","test_002_post_booking","",""
+"[Assumption] both fields are stated required but no documented rejection behavior
+        exists. Observed live (context/schema-validation-report.md row 7): a missing `password` is
+        treated exactly like wrong credentials — `200 OK` and `{""reason"": ""Bad credentials""}`.
+        case: TC-post-auth-boundary-missing-password-field","55","test_auth_rejects_missing_password_field","tests.auth","2026-10-10","passed","2026-10-10","TestAuth","test_001_auth","",""

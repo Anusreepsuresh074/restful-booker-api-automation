@@ -1,2 +1,0 @@
-status_code=200
-[{"bookingid": 3}, {"bookingid": 4}, {"bookingid": 5}, {"bookingid": 6}, {"bookingid": 7}, {"bookingid": 8}, {"bookingid": 9}, {"bookingid": 10}, {"bookingid": 12}, {"bookingid": 14}, {"bookingid": 15}, {"bookingid": 16}, {"bookingid": 17}, {"bookingid": 18}, {"bookingid": 19}, {"bookingid": 20}, {"bookingid": 21}, {"bookingid": 22}, {"bookingid": 24}, {"bookingid": 25}, {"bookingid": 26}, {"bookingid": 27}, {"bookingid": 29}, {"bookingid": 30}, {"bookingid": 31}, {"bookingid": 32}, {"bookingid"

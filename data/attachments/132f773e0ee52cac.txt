@@ -1,0 +1,3 @@
+DELETE https://restful-booker.herokuapp.com/booking/5032
+params=None
+json=None

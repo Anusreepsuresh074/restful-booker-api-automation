@@ -1,2 +1,0 @@
-status_code=200
-{"firstname": "Fn9386c15827", "lastname": "Ln8c67bf217c", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}

@@ -1,0 +1,2 @@
+2026-10-16 06:32:36,925 | INFO | src.core.api_base | POST https://restful-booker.herokuapp.com/auth | params=None | json={'username': 'admin', 'password': '***'}
+2026-10-16 06:32:37,148 | INFO | src.core.api_base | -> 200 {"token": "***"}

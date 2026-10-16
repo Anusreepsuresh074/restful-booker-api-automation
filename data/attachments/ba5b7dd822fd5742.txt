@@ -1,2 +1,0 @@
-2026-10-15 06:40:24,537 | INFO | src.core.api_base | GET https://restful-booker.herokuapp.com/booking | params={'firstname': 'NoMatch05c5c4022bbf470580b87b955c90479c'} | json=None
-2026-10-15 06:40:24,582 | INFO | src.core.api_base | -> 200 []

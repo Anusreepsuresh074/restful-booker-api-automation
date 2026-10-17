@@ -1,0 +1,10 @@
+2026-10-17 06:22:01,469 | INFO | src.core.api_base | POST https://restful-booker.herokuapp.com/auth | params=None | json={'username': 'admin', 'password': '***'}
+2026-10-17 06:22:01,535 | INFO | src.core.api_base | -> 200 {"token": "***"}
+2026-10-17 06:22:01,541 | INFO | src.core.api_base | POST https://restful-booker.herokuapp.com/booking | params=None | json={'firstname': 'Fn2e13b6dd64', 'lastname': 'Ln542861628c', 'totalprice': 111, 'depositpaid': True, 'bookingdates': {'checkin': '2026-01-01', 'checkout': '2026-01-05'}, 'additionalneeds': 'Breakfast'}
+2026-10-17 06:22:01,606 | INFO | src.core.api_base | -> 200 {"bookingid": 589, "booking": {"firstname": "Fn2e13b6dd64", "lastname": "Ln542861628c", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}}
+2026-10-17 06:22:01,614 | INFO | src.core.api_base | PUT https://restful-booker.herokuapp.com/booking/589 | params=None | json={'firstname': 'Fn51d6fc6db5', 'lastname': 'Ln26873b5efb', 'totalprice': 111, 'depositpaid': True, 'bookingdates': {'checkin': '2026-01-01', 'checkout': '2026-01-05'}, 'additionalneeds': 'Breakfast'}
+2026-10-17 06:22:01,722 | INFO | src.core.api_base | -> 200 {"firstname": "Fn51d6fc6db5", "lastname": "Ln26873b5efb", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}
+2026-10-17 06:22:01,728 | INFO | src.core.api_base | GET https://restful-booker.herokuapp.com/booking/589 | params=None | json=None
+2026-10-17 06:22:01,787 | INFO | src.core.api_base | -> 200 {"firstname": "Fn51d6fc6db5", "lastname": "Ln26873b5efb", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}
+2026-10-17 06:22:01,798 | INFO | src.core.api_base | DELETE https://restful-booker.herokuapp.com/booking/589 | params=None | json=None
+2026-10-17 06:22:01,851 | INFO | src.core.api_base | -> 201 Created

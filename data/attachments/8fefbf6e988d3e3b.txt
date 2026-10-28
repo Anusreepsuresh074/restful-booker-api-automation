@@ -1,0 +1,3 @@
+PUT https://restful-booker.herokuapp.com/booking/656
+params=None
+json={'firstname': 'PartialOnly'}

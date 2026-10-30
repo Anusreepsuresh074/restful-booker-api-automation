@@ -1,0 +1,2 @@
+INFO     src.core.api_base:api_base.py:49 GET https://restful-booker.herokuapp.com/booking | params={'firstname': 'NoMatch38543ad44dd1413bb9417a541c58f3b8'} | json=None
+INFO     src.core.api_base:api_base.py:61 -> 200 []

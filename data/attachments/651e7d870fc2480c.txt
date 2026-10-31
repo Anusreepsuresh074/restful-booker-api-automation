@@ -1,0 +1,8 @@
+2026-10-31 07:41:24,674 | INFO | src.core.api_base | POST https://restful-booker.herokuapp.com/booking | params=None | json={'firstname': 'Fn11fda23458', 'lastname': 'Ln3a047c9f27', 'totalprice': 111, 'depositpaid': True, 'bookingdates': {'checkin': '2026-01-01', 'checkout': '2026-01-05'}, 'additionalneeds': 'Breakfast'}
+2026-10-31 07:41:24,885 | INFO | src.core.api_base | -> 200 {"bookingid": 241, "booking": {"firstname": "Fn11fda23458", "lastname": "Ln3a047c9f27", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}}
+2026-10-31 07:41:24,891 | INFO | src.core.api_base | DELETE https://restful-booker.herokuapp.com/booking/241 | params=None | json=None
+2026-10-31 07:41:25,101 | INFO | src.core.api_base | -> 201 Created
+2026-10-31 07:41:25,102 | INFO | src.core.api_base | GET https://restful-booker.herokuapp.com/booking/241 | params=None | json=None
+2026-10-31 07:41:25,308 | INFO | src.core.api_base | -> 404 Not Found
+2026-10-31 07:41:25,309 | INFO | src.core.api_base | DELETE https://restful-booker.herokuapp.com/booking/241 | params=None | json=None
+2026-10-31 07:41:25,516 | INFO | src.core.api_base | -> 405 Method Not Allowed

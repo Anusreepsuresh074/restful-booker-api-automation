@@ -1,3 +1,0 @@
-GET https://restful-booker.herokuapp.com/booking
-params={'firstname': 'NoMatchdb22a25ee9494a989da550997f880dad'}
-json=None

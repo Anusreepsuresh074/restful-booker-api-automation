@@ -1,2 +1,0 @@
-status_code=200
-{"bookingid": 2919, "booking": {"firstname": "Fn9c378c7e20", "lastname": "Ln53461b3877", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}}

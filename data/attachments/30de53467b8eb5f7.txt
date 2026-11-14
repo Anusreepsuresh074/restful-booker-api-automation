@@ -1,0 +1,2 @@
+status_code=200
+{"bookingid": 2741, "booking": {"firstname": "Fn05fa4cd66b", "lastname": "Lnc3ca1df731", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}}

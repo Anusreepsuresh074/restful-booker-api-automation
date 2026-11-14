@@ -1,0 +1,10 @@
+2026-11-14 08:16:01,905 | INFO | src.core.api_base | POST https://restful-booker.herokuapp.com/auth | params=None | json={'username': 'admin', 'password': '***'}
+2026-11-14 08:16:02,073 | INFO | src.core.api_base | -> 200 {"token": "***"}
+2026-11-14 08:16:02,078 | INFO | src.core.api_base | POST https://restful-booker.herokuapp.com/booking | params=None | json={'firstname': 'Fn0b1b247739', 'lastname': 'Lnae4f0b39ca', 'totalprice': 111, 'depositpaid': True, 'bookingdates': {'checkin': '2026-01-01', 'checkout': '2026-01-05'}, 'additionalneeds': 'Breakfast'}
+2026-11-14 08:16:02,214 | INFO | src.core.api_base | -> 200 {"bookingid": 2734, "booking": {"firstname": "Fn0b1b247739", "lastname": "Lnae4f0b39ca", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}}
+2026-11-14 08:16:02,221 | INFO | src.core.api_base | PUT https://restful-booker.herokuapp.com/booking/2734 | params=None | json={'firstname': 'Fn9e448ff371', 'lastname': 'Lnc556605569', 'totalprice': 111, 'depositpaid': True, 'bookingdates': {'checkin': '2026-01-01', 'checkout': '2026-01-05'}, 'additionalneeds': 'Breakfast'}
+2026-11-14 08:16:02,342 | INFO | src.core.api_base | -> 200 {"firstname": "Fn9e448ff371", "lastname": "Lnc556605569", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}
+2026-11-14 08:16:02,347 | INFO | src.core.api_base | GET https://restful-booker.herokuapp.com/booking/2734 | params=None | json=None
+2026-11-14 08:16:02,485 | INFO | src.core.api_base | -> 200 {"firstname": "Fn9e448ff371", "lastname": "Lnc556605569", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}
+2026-11-14 08:16:02,493 | INFO | src.core.api_base | DELETE https://restful-booker.herokuapp.com/booking/2734 | params=None | json=None
+2026-11-14 08:16:02,614 | INFO | src.core.api_base | -> 201 Created

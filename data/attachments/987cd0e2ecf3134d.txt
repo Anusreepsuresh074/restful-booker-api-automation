@@ -1,0 +1,6 @@
+2026-11-28 09:35:00,541 | INFO | src.core.api_base | POST https://restful-booker.herokuapp.com/booking | params=None | json={'firstname': 'Fn7fd295c429', 'lastname': 'Lnac6ba33e60', 'totalprice': 111, 'depositpaid': True, 'bookingdates': {'checkin': '2026-01-01', 'checkout': '2026-01-05'}, 'additionalneeds': 'Breakfast'}
+2026-11-28 09:35:00,555 | INFO | src.core.api_base | -> 200 {"bookingid": 2132, "booking": {"firstname": "Fn7fd295c429", "lastname": "Lnac6ba33e60", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}}
+2026-11-28 09:35:00,559 | INFO | src.core.api_base | GET https://restful-booker.herokuapp.com/booking/2132 | params=None | json=None
+2026-11-28 09:35:00,573 | INFO | src.core.api_base | -> 200 {"firstname": "Fn7fd295c429", "lastname": "Lnac6ba33e60", "totalprice": 111, "depositpaid": true, "bookingdates": {"checkin": "2026-01-01", "checkout": "2026-01-05"}, "additionalneeds": "Breakfast"}
+2026-11-28 09:35:00,579 | INFO | src.core.api_base | DELETE https://restful-booker.herokuapp.com/booking/2132 | params=None | json=None
+2026-11-28 09:35:00,595 | INFO | src.core.api_base | -> 201 Created
